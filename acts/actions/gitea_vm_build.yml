@@ -1,0 +1,43 @@
+name: Setup KVM VM for Gitea
+
+on:
+  workflow_call:
+
+jobs:
+  setup_kvm_vm:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: |
+          if ! command -v virt-install &> /dev/null; then
+            sudo apt-get update
+            sudo apt-get install -y qemu-kvm libvirt-daemon-system libvirt-clients virtinst
+          fi
+
+      - name: Download Alpine Linux ISO
+        run: |
+          wget -O alpine.iso https://dl-cdn.alpinelinux.org/alpine/v3.14/releases/x86_64/alpine-standard-3.14.2-x86_64.iso
+
+      - name: Create KVM VM image
+        run: |
+          sudo virt-install \
+            --name gitea-vm \
+            --ram 2048 \
+            --disk path=/var/lib/libvirt/images/gitea-vm.img,size=10 \
+            --vcpus 2 \
+            --os-type linux \
+            --os-variant generic \
+            --network network=default \
+            --graphics none \
+            --console pty,target_type=serial \
+            --location alpine.iso \
+            --extra-args 'console=ttyS0,115200n8 serial'
+
+      - name: Configure VM for Gitea
+        run: |
+          # Add your configuration steps here
+          echo "VM setup complete"

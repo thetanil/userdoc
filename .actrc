@@ -1,0 +1,3 @@
+--action-offline-mode
+-P local=-self-hosted
+-W actions/main.yml

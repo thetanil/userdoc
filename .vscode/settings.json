@@ -1,0 +1,24 @@
+{
+    "github.copilot.chat.experimental.codeGeneration.instructions": [
+        {
+            "file": "code-style.md" // import instructions from file `code-style.md`
+        }
+    ],
+    "vim.easymotion": true,
+    "vim.incsearch": true,
+    "vim.useSystemClipboard": true,
+    "vim.useCtrlKeys": true,
+    "vim.hlsearch": true,
+    "vim.leader": "<space>",
+    "vim.handleKeys": {
+        "<C-a>": false,
+        "<C-c>": false,
+        "<C-v>": false,
+        "<C-x>": false,
+        "<C-p>": false,
+        "<C-w>": false,
+        "<C-f>": false,
+        "<C-b>": false, // close side bar
+    },
+    "editor.formatOnSave": true,
+}

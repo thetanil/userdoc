@@ -1,0 +1,16 @@
+name: Main
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  echo_env_vars:
+    runs-on: local
+
+    steps:
+      - name: echo CI env vars
+        run: |
+          echo "TIMEFORMAT: ${{ env.TIMEFORMAT }}"
+          time echo "CI: ${{ env.CI }}"
