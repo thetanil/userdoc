@@ -1,0 +1,5 @@
+{{ .Inner }}
+{{ .Page.Path }}
+<p>site/layouts/shortcodes/src_go.html</p>
+{{ $code := .Inner | markdownify | plainify }}
+{{ $code }}

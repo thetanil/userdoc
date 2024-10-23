@@ -1,0 +1,29 @@
+baseURL = 'https://example.org/'
+languageCode = 'en-us'
+title = 'My New Hugo Site'
+theme = 'hugo-dead-simple'
+
+[outputs]
+  home = ["HTML", "C", "GO"]
+
+[outputFormats]
+    [outputFormats.GO]
+        baseName = 'main'
+        mediaType = 'text/go'
+        isHTML = false
+        isPlainText = true
+        path = 'src/go'
+
+    [outputFormats.C]
+        baseName = 'main'
+        mediaType = 'text/c'
+        isHTML = false
+        isPlainText = true
+        path = 'src/c'
+
+[mediaTypes]
+  [mediaTypes.'text/c']
+    suffixes = ['c']
+  [mediaTypes.'text/go']
+    suffixes = ['go']
+
