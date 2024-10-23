@@ -1,11 +1,18 @@
 name: Main
 
+# start act -w -W acts/main.yml
+# generate ../build/src
+# start hugo server if not running
+
 on:
   push:
     branches:
       - main
 
 jobs:
+  call-pandoc-build:
+    uses: ./acts/actions/pandoc_build.yml
+
   echo_env_vars:
     runs-on: local
 

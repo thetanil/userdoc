@@ -2,6 +2,7 @@ baseURL = 'https://example.org/'
 languageCode = 'en-us'
 title = 'My New Hugo Site'
 theme = 'hugo-dead-simple'
+publishDir = '/tmp/hugo_publish_dir'
 
 [outputs]
   home = ["HTML", "C", "GO"]

@@ -1,2 +1,9 @@
+hugo.log
+.ninja_log
+build.ninja
+.task/checksum/watch_pandoc
 bin/act
 bin/hugo
+bin/ninja
+bin/task
+site/public/

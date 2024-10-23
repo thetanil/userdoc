@@ -1,0 +1,44 @@
+version: "3"
+interval: "200ms"
+
+tasks:
+  start_hugo:
+    desc: "Start Hugo server if it's not running"
+    cmds:
+      - |
+        if ! pgrep -x "hugo" > /dev/null; then
+          cd site && hugo server &
+        fi
+
+  restart_hugo:
+    desc: "Restart Hugo server"
+    run: once
+    cmds:
+      - |
+        if pgrep -x "hugo" > /dev/null; then
+          kill -9 $(pgrep -x "hugo")
+        fi
+        # cd site && nohup hugo server >> hugo.log 2>&1 &
+        cd site && hugo server &
+
+  regen_ninja:
+    desc: "Regenerate Ninja file"
+    run: once
+    cmds: ["./bin/gen_ninja.sh"]
+
+  watch_pandoc:
+    desc: Run Pandoc on markdown file changes
+    watch: true
+    sources:
+      - site/content/**/*.md
+    cmds: ["time ./bin/ninja"]
+
+  default:
+    desc: "Start Hugo and watch for markdown changes"
+    env:
+      TIMEFORMAT: "%3R"
+    deps:
+      # - restart_hugo
+      - regen_ninja
+    cmds:
+      - task: watch_pandoc

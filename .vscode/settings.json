@@ -21,4 +21,7 @@
         "<C-b>": false, // close side bar
     },
     "editor.formatOnSave": true,
+    "yaml.schemas": {
+        "https://taskfile.dev/schema.json": "file:///home/user/code/userdoc/Taskfile.yml"
+    },
 }
