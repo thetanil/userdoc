@@ -8,12 +8,12 @@ jobs:
     name: Test on Ubuntu
     runs-on: ubuntu-latest
     steps:
-      #     - name: Install qemu-utils
-      #       run: |
-      #         sudo apt-get update
-      #         sudo apt-get install qemu-utils
+      - name: Install qemu-utils
+        run: |
+          sudo apt-get update
+          sudo apt-get install qemu-utils
 
-      #     - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
       #     - name: Build image for x86_64 with BIOS mode and without GPT
       #       run: |
@@ -43,6 +43,8 @@ jobs:
       - name: Build image for x86_64 with UEFI mode
         run: |
           cd bin/alpine-make-vm-image && \
+          ls && \
+          pwd && \
           chmod +x alpine-make-vm-image && \
           sudo ./alpine-make-vm-image \
               --image-format qcow2 \
