@@ -42,6 +42,7 @@ jobs:
 
       - name: Build image for x86_64 with UEFI mode
         run: |
+          export FILENAME=alpine-uefi-$(date +%Y-%m-%d).qcow2
           cd bin/alpine-make-vm-image && \
           ls && \
           pwd && \
@@ -55,12 +56,14 @@ jobs:
               --fs-skel-dir example/rootfs \
               --fs-skel-chown root:root \
               --script-chroot \
-              alpine-uefi-$(date +%Y-%m-%d).qcow2 -- ./example/configure.sh
+              $FILENAME -- ./example/configure.sh
+          echo "filename=$FILENAME" >> $GITHUB_ENV
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: alpine-uefi-$(date +%Y-%m-%d).qcow2
-          path: alpine-uefi-$(date +%Y-%m-%d).qcow2
+          name: ${{ env.filename }}
+          path: ${{ env.filename }}
 
   #     - name: Install qemu-aarch64 and register in binfmt
   #       uses: jirutka/setup-alpine@v1
