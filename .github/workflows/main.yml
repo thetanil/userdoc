@@ -13,19 +13,25 @@ jobs:
           sudo apt-get update
           sudo apt-get install qemu-utils
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      #     - name: Build image for x86_64 with BIOS mode and without GPT
-      #       run: |
-      #         sudo ./alpine-make-vm-image \
-      #             --image-format qcow2 \
-      #             --image-size 2G \
-      #             --repositories-file example/repositories \
-      #             --packages "$(cat example/packages)" \
-      #             --fs-skel-dir example/rootfs \
-      #             --fs-skel-chown root:root \
-      #             --script-chroot \
-      #             alpine-bios-$(date +%Y-%m-%d).qcow2 -- ./example/configure.sh
+      - name: Build image for x86_64 with BIOS mode and without GPT
+        run: |
+          export FILENAME=alpine-bios-$(date +%Y-%m-%d).qcow2
+          cd bin/alpine-make-vm-image && \
+          ls && \
+          pwd && \
+          chmod +x alpine-make-vm-image && \
+          sudo ./alpine-make-vm-image \
+              --image-format qcow2 \
+              --image-size 2G \
+              --repositories-file example/repositories \
+              --packages "$(cat example/packages)" \
+              --fs-skel-dir example/rootfs \
+              --fs-skel-chown root:root \
+              --script-chroot \
+              $FILENAME -- ./example/configure.sh
+          echo "filename=$FILENAME" >> $GITHUB_ENV
 
       #     - name: Build image for x86_64 with BIOS mode and GPT
       #       run: |
@@ -40,24 +46,24 @@ jobs:
       #             --script-chroot \
       #             alpine-bios-part-$(date +%Y-%m-%d).raw -- ./example/configure.sh
 
-      - name: Build image for x86_64 with UEFI mode
-        run: |
-          export FILENAME=alpine-uefi-$(date +%Y-%m-%d).qcow2
-          cd bin/alpine-make-vm-image && \
-          ls && \
-          pwd && \
-          chmod +x alpine-make-vm-image && \
-          sudo ./alpine-make-vm-image \
-              --image-format qcow2 \
-              --image-size 2G \
-              --boot-mode UEFI \
-              --repositories-file example/repositories \
-              --packages "$(cat example/packages)" \
-              --fs-skel-dir example/rootfs \
-              --fs-skel-chown root:root \
-              --script-chroot \
-              $FILENAME -- ./example/configure.sh
-          echo "filename=$FILENAME" >> $GITHUB_ENV
+      # - name: Build image for x86_64 with UEFI mode
+      #   run: |
+      #     export FILENAME=alpine-uefi-$(date +%Y-%m-%d).qcow2
+      #     cd bin/alpine-make-vm-image && \
+      #     ls && \
+      #     pwd && \
+      #     chmod +x alpine-make-vm-image && \
+      #     sudo ./alpine-make-vm-image \
+      #         --image-format qcow2 \
+      #         --image-size 2G \
+      #         --boot-mode UEFI \
+      #         --repositories-file example/repositories \
+      #         --packages "$(cat example/packages)" \
+      #         --fs-skel-dir example/rootfs \
+      #         --fs-skel-chown root:root \
+      #         --script-chroot \
+      #         $FILENAME -- ./example/configure.sh
+      #     echo "filename=$FILENAME" >> $GITHUB_ENV
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
