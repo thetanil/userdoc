@@ -57,7 +57,7 @@ jobs:
               --script-chroot \
               alpine-uefi-$(date +%Y-%m-%d).qcow2 -- ./example/configure.sh
       - name: Upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: alpine-uefi-$(date +%Y-%m-%d).qcow2
           path: alpine-uefi-$(date +%Y-%m-%d).qcow2
