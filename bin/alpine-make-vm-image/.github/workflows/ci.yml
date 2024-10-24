@@ -25,6 +25,7 @@ jobs:
               --fs-skel-dir example/rootfs \
               --fs-skel-chown root:root \
               --script-chroot \
+              -t \
               alpine-bios-$(date +%Y-%m-%d).qcow2 -- ./example/configure.sh
 
       - name: Build image for x86_64 with BIOS mode and GPT
