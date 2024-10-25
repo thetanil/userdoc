@@ -7,3 +7,8 @@ bin/hugo
 bin/ninja
 bin/task
 site/public/
+abuild/alpine-standard-3.20.3-x86_64.iso
+abuild/alpine.qcow2
+images/alpine-bios-2024-10-24.qc.raw
+images/alpine-bios-2024-10-24.qcow2
+images/alpine-bios-2024-10-24.raw
