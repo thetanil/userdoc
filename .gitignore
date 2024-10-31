@@ -12,3 +12,7 @@ abuild/alpine.qcow2
 images/alpine-bios-2024-10-24.qc.raw
 images/alpine-bios-2024-10-24.qcow2
 images/alpine-bios-2024-10-24.raw
+carlpine_1/bzImage
+carlpine_1/rootfs.cpio
+build/qemu-kernel-build/src/overlay/dumb-init
+build/qemu-kernel-build/src/dumb-init/dumb-init
