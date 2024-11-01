@@ -2,8 +2,8 @@ name: Build and Release
 
 on:
   push:
-    tags:
-      - "v*"
+    # tags:
+    #   - "v*"
 
 jobs:
   build_dumb_init:
@@ -48,7 +48,7 @@ jobs:
           make -j8
 
       - name: Upload kernel artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: bzImage
           path: arch/x86/boot/bzImage
@@ -82,7 +82,7 @@ jobs:
           find . | cpio -o -H newc > /alpine-rootfs.cpio
 
       - name: Upload alpine rootfs artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: alpine-rootfs.cpio
           path: /alpine-rootfs.cpio
