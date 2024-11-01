@@ -108,7 +108,7 @@ jobs:
           name: bzImage
 
       - name: copy kernel artifact
-        run: cp bzImage/bzImage /tmp/alpine_base/bzImage
+        run: cp bzImage /tmp/alpine_base/bzImage
 
       - name: Download alpine rootfs artifact
         uses: actions/download-artifact@v4
@@ -116,7 +116,7 @@ jobs:
           name: alpine-rootfs.cpio
 
       - name: copy alpine rootfs artifact
-        run: cp alpine-rootfs.cpio/alpine-rootfs.cpio /tmp/alpine_base/alpine-rootfs.cpio
+        run: cp alpine-rootfs.cpio /tmp/alpine_base/alpine-rootfs.cpio
 
       - name: add launch script for qemu-system-x86_64
         run: |
