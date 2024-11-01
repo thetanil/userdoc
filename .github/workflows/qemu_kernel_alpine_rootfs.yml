@@ -116,12 +116,8 @@ jobs:
           echo "qemu-system-x86_64 -kernel ./bzImage -initrd ./alpine-rootfs.cpio -nographic -append 'console=ttyS0'" > alpine_base/launch.sh
           chmod +x alpine_base/launch.sh
 
-      - name: zip alpine base
-        run: |
-          tar -czvf alpine_base.tar.gz alpine_base
-
       - name: Upload alpine base artifact
         uses: actions/upload-artifact@v4
         with:
-          name: alpine_base.tar.gz
-          path: alpine_base.tar.gz
+          name: alpine_base.zip
+          path: alpine_base
