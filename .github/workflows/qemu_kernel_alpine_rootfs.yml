@@ -120,16 +120,17 @@ jobs:
 
       - name: add launch script for qemu-system-x86_64
         run: |
-          echo "qemu-system-x86_64 
-          -kernel ./bzImage 
-          -initrd ./alpine-rootfs.cpio
-          -m 64M
-          -cpu host
-          -enable-kvm 
-          -nographic" > /tmp/alpine_base/launch.sh
+          echo "qemu-system-x86_64 \
+            -kernel ./bzImage \
+            -initrd ./alpine-rootfs.cpio \
+            -m 64M \
+            -cpu host \
+            -enable-kvm  \
+            -nographic" > /tmp/alpine_base/launch.sh
           chmod +x /tmp/alpine_base/launch.sh
 
       - name: Upload alpine base artifact
         uses: actions/upload-artifact@v4
         with:
           path: /tmp/alpine_base
+          name: alpine_base
