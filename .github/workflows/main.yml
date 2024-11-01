@@ -1,7 +1,8 @@
 name: CI
 on:
-  - pull_request
-  - push
+  push:
+    paths:
+      - bin/alpine-make-vm-image/**
 
 jobs:
   test-ubuntu:
