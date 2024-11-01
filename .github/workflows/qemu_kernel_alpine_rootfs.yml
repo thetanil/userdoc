@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Install dependencies
         run: sudo apt-get update && sudo apt-get install -y gcc make
@@ -19,39 +19,39 @@ jobs:
       - name: Build dumb-init
         run: |
           echo "Building dumb init"
-          gcc -O2 src/dumb-init/dumb-init.c -o src/overlay/dumb-init
+          gcc -O2 abuild/qemu-kernel-build/src/dumb-init/dumb-init.c -o abuild/qemu-kernel-build/src/dumb-init/dumb-init
 
       - name: Upload kernel artifact
         uses: actions/upload-artifact@v4
         with:
           name: dumb-init
-          path: src/overlay/dumb-init
+          path: abuild/qemu-kernel-build/src/dumb-init/dumb-init
 
   build_kernel:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Download kernel source
         run: |
           echo "Downloading kernel source"
           curl -O https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.6.58.tar.xz
-          tar xvf linux-6.6.58.tar.xz
-          cp src/qemu-kernel-config linux-6.6.58/.config
+          tar xvf linux-6.6.58.tar.xz -C /tmp/linux-6.6.58
+          cp abuild/qemu-kernel-build/src/qemu-kernel-config /tmp/linux-6.6.58/.config
 
       - name: Build kernel
         run: |
           echo "Building kernel"
-          cd linux-6.6.58
+          cd /tmp/linux-6.6.58
           make -j8
 
       - name: Upload kernel artifact
         uses: actions/upload-artifact@v4
         with:
           name: bzImage
-          path: arch/x86/boot/bzImage
+          path: /tmp/linux-6.6.58/arch/x86/boot/bzImage
 
   build_alpine_rootfs:
     runs-on: ubuntu-latest
@@ -59,33 +59,33 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Download alpine rootfs
         run: |
           echo "Downloading alpine rootfs"
           curl -O https://dl-cdn.alpinelinux.org/alpine/latest-stable/releases/x86_64/alpine-minirootfs-3.20.3-x86_64.tar.gz
           mkdir -pv alpine-rootfs
-          tar xvf alpine-minirootfs-3.20.3-x86_64.tar.gz -C alpine-rootfs
+          tar xvf alpine-minirootfs-3.20.3-x86_64.tar.gz -C /tmp/alpine-rootfs
 
       - name: download dumb-init
         uses: actions/download-artifact@v4
         with:
           name: dumb-init
-          path: src/overlay
+          path: /tmp/alpine-rootfs
 
       - name: Prepare rootfs
         run: |
-          chmod +x src/overlay/init
-          chmod +x src/overlay/dumb-init
-          cd src/overlay
-          find . | cpio -o -H newc > /alpine-rootfs.cpio
+          chmod +x /tmp/alpine-rootfs/init
+          chmod +x /tmp/alpine-rootfs/dumb-init
+          cd /tmp/alpine-rootfs
+          find . | cpio -o -H newc > /tmp/alpine-rootfs.cpio
 
       - name: Upload alpine rootfs artifact
         uses: actions/upload-artifact@v4
         with:
           name: alpine-rootfs.cpio
-          path: /alpine-rootfs.cpio
+          path: /tmp/alpine-rootfs.cpio
 
   release:
     runs-on: ubuntu-latest
@@ -93,7 +93,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Download kernel artifact
         uses: actions/download-artifact@v4
