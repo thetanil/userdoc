@@ -126,6 +126,7 @@ jobs:
             -initrd ./alpine-rootfs.cpio \
             -m 64M \
             -cpu host \
+            -noreboot \
             -enable-kvm  \
             -nographic" > /tmp/alpine_base/launch.sh
           chmod +x /tmp/alpine_base/launch.sh
