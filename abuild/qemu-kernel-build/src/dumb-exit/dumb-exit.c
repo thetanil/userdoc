@@ -23,8 +23,7 @@ int main(int argc, char **argv)
         clean_exit();
     }
     status = atoi(argv[1]);
-    printf("exiting with status %d (in three seconds)\n", status);
-    sleep(3);
+    printf("exiting with status %d\n", status);
     if (!status)
     {
         clean_exit();
