@@ -126,4 +126,4 @@ jobs:
       - name: Upload alpine base artifact
         uses: actions/upload-artifact@v4
         with:
-          path: alpine_base
+          path: /tmp/alpine_base
