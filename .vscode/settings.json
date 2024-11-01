@@ -1,9 +1,4 @@
 {
-    "github.copilot.chat.experimental.codeGeneration.instructions": [
-        {
-            "file": "code-style.md" // import instructions from file `code-style.md`
-        }
-    ],
     "vim.easymotion": true,
     "vim.incsearch": true,
     "vim.useSystemClipboard": true,
@@ -24,4 +19,9 @@
     "yaml.schemas": {
         "https://taskfile.dev/schema.json": "file:///home/user/code/userdoc/Taskfile.yml"
     },
+    "github.copilot.chat.codeGeneration.instructions": [
+        {
+            "file": "code-style.md"
+        }
+    ],
 }
