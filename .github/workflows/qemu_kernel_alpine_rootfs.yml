@@ -89,7 +89,7 @@ jobs:
 
   release:
     runs-on: ubuntu-latest
-    needs: [build_kernel, prepare_rootfs]
+    needs: [build_kernel, build_alpine_rootfs]
 
     steps:
       - name: Checkout repository
