@@ -18,6 +18,7 @@ jobs:
         run: |
           echo "Building dumb init"
           musl-gcc -O2 abuild/qemu-kernel-build/src/dumb-init/dumb-init.c -o abuild/qemu-kernel-build/src/dumb-init/dumb-init
+          strip --strip-all abuild/qemu-kernel-build/src/dumb-init/dumb-init
 
       - name: Upload kernel artifact
         uses: actions/upload-artifact@v4
@@ -113,7 +114,8 @@ jobs:
       - name: add launch script for qemu-system-x86_64
         run: |
           echo "qemu-system-x86_64 -kernel ./bzImage -initrd ./alpine-rootfs.cpio -nographic -append 'console=ttyS0'" > alpine_base/launch.sh
-          chmod +x launch.sh
+          chmod +x alpine_base/launch.sh
+
       - name: zip alpine base
         run: |
           tar -czvf alpine_base.tar.gz alpine_base
