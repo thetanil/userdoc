@@ -120,7 +120,13 @@ jobs:
 
       - name: add launch script for qemu-system-x86_64
         run: |
-          echo "qemu-system-x86_64 -kernel ./bzImage -initrd ./alpine-rootfs.cpio -nographic -append 'console=ttyS0'" > /tmp/alpine_base/launch.sh
+          echo "qemu-system-x86_64 
+          -kernel ./bzImage 
+          -initrd ./alpine-rootfs.cpio
+          -m 64M
+          -cpu host
+          -enable-kvm 
+          -nographic" > /tmp/alpine_base/launch.sh
           chmod +x /tmp/alpine_base/launch.sh
 
       - name: Upload alpine base artifact
