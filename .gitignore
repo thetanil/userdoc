@@ -16,3 +16,11 @@ carlpine_1/bzImage
 carlpine_1/rootfs.cpio
 build/qemu-kernel-build/src/overlay/dumb-init
 build/qemu-kernel-build/src/dumb-init/dumb-init
+abuild/qemu-kernel-build/output
+abuild/qemu-kernel-build/alpine-minirootfs-3.20.3-x86_64.tar.gz
+abuild/qemu-kernel-build/linux-6.6.58.tar.xz
+abuild/qemu-kernel-build/alpine-rootfs
+abuild/qemu-kernel-build/linux-6.6.58
+
+abuild/qemu-kernel-build/src/dumb-init/dumb-init
+abuild/qemu-kernel-build/src/overlay/dumb-init

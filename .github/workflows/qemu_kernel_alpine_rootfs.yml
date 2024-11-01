@@ -1,0 +1,104 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build_dumb_init:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y gcc make
+
+      - name: Build dumb-init
+        run: |
+          echo "Building dumb init"
+          gcc -O2 src/dumb-init/dumb-init.c -o src/overlay/dumb-init
+
+  download_kernel_source:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Download kernel source
+        run: |
+          echo "Downloading kernel source"
+          curl -O https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.6.58.tar.xz
+          tar xvf linux-6.6.58.tar.xz
+          cp src/qemu-kernel-config linux-6.6.58/.config
+
+      - name: Build kernel
+        run: |
+          echo "Building kernel"
+          cd linux-6.6.58
+          make -j8
+
+      - name: Upload kernel artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: bzImage
+          path: arch/x86/boot/bzImage
+
+  download_alpine_rootfs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Download alpine rootfs
+        run: |
+          echo "Downloading alpine rootfs"
+          curl -O https://dl-cdn.alpinelinux.org/alpine/latest-stable/releases/x86_64/alpine-minirootfs-3.20.3-x86_64.tar.gz
+          mkdir -pv alpine-rootfs
+          tar xvf alpine-minirootfs-3.20.3-x86_64.tar.gz -C alpine-rootfs
+
+      - name: Upload alpine rootfs artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: alpine-rootfs
+          path: alpine-rootfs
+
+  prepare_rootfs:
+    runs-on: ubuntu-latest
+    needs: [build_dumb_init, download_alpine_rootfs]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Prepare rootfs
+        run: |
+          echo "Preparing rootfs"
+          cp src/overlay/* alpine-rootfs/
+          chmod +x alpine-rootfs/init
+          chmod +x alpine-rootfs/dumb-init
+          pushd alpine-rootfs
+          find . | cpio -o -H newc > ../output/rootfs.cpio
+          popd
+
+  release:
+    runs-on: ubuntu-latest
+    needs: [build_kernel, prepare_rootfs]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Bundle output into zip
+        run: zip -r output.zip output
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: output.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

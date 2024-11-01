@@ -1,9 +1,12 @@
-#!/bin/sh
+#!/bin/bash
+# apk add xz gcc flex bison make curl bash build-base linux-headers
+
+set -e
 
 echo "Building dumb init"
 sleep 2
 pushd src/dumb-init
-musl-gcc -O2 dumb-init.c -o ../../src/overlay/dumb-init
+gcc -O2 dumb-init.c -o ../../src/overlay/dumb-init
 popd
 
 echo "Downloading kernel source"
@@ -30,6 +33,6 @@ tar xvf ../alpine-minirootfs-3.20.3-x86_64.tar.gz
 cp ../src/overlay/* .
 chmod +x init
 chmod +x dumb-init
-find . | sudo cpio -o -H newc > ../output/rootfs.cpio
+find . | cpio -o -H newc > ../output/rootfs.cpio
 popd
 
