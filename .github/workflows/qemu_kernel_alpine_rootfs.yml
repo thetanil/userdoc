@@ -99,25 +99,31 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: merge artifacts
+        run: mkdir -pv /tmp/alpine_base
+
       - name: Download kernel artifact
         uses: actions/download-artifact@v4
         with:
           name: bzImage
-          path: alpine_base/bzImage
+
+      - name: copy kernel artifact
+        run: cp bzImage/bzImage /tmp/alpine_base/bzImage
 
       - name: Download alpine rootfs artifact
         uses: actions/download-artifact@v4
         with:
           name: alpine-rootfs.cpio
-          path: alpine_base/alpine-rootfs.cpio
+
+      - name: copy alpine rootfs artifact
+        run: cp alpine-rootfs.cpio/alpine-rootfs.cpio /tmp/alpine_base/alpine-rootfs.cpio
 
       - name: add launch script for qemu-system-x86_64
         run: |
           echo "qemu-system-x86_64 -kernel ./bzImage -initrd ./alpine-rootfs.cpio -nographic -append 'console=ttyS0'" > alpine_base/launch.sh
-          chmod +x alpine_base/launch.sh
+          chmod +x /tmp/alpine_base/launch.sh
 
       - name: Upload alpine base artifact
         uses: actions/upload-artifact@v4
         with:
-          name: alpine_base.zip
           path: alpine_base
