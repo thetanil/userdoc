@@ -80,8 +80,9 @@ jobs:
 
       - name: Prepare rootfs
         run: |
-          # chmod +x /tmp/alpine-rootfs/init
           chmod +x /tmp/alpine-rootfs/dumb-init
+          cp abuild/qemu-kernel-build/src/overlay/init /tmp/alpine-rootfs/init
+          chmod +x /tmp/alpine-rootfs/init
           cd /tmp/alpine-rootfs
           find . | cpio -o -H newc > /tmp/alpine-rootfs.cpio
 
