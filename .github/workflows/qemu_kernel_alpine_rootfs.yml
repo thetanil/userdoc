@@ -2,8 +2,6 @@ name: Build and Release
 
 on:
   push:
-    tags:
-      - "v*"
 
 jobs:
   build_dumb_init:
@@ -92,32 +90,32 @@ jobs:
           name: alpine-rootfs.cpio
           path: /tmp/alpine-rootfs.cpio
 
-  release:
-    runs-on: ubuntu-latest
-    needs: [build_kernel, build_alpine_rootfs]
+  # release:
+  #   runs-on: ubuntu-latest
+  #   needs: [build_kernel, build_alpine_rootfs]
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v4
 
-      - name: Download kernel artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: bzImage
-          path: output/bzImage
+  #     - name: Download kernel artifact
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         name: bzImage
+  #         path: output/bzImage
 
-      - name: Download alpine rootfs artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: alpine-rootfs.cpio
-          path: output/alpine-rootfs.cpio
+  #     - name: Download alpine rootfs artifact
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         name: alpine-rootfs.cpio
+  #         path: output/alpine-rootfs.cpio
 
-      - name: Bundle output into zip
-        run: zip -r output.zip output
+  #     - name: Bundle output into zip
+  #       run: zip -r output.zip output
 
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: output.zip
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #     - name: Create GitHub Release
+  #       uses: softprops/action-gh-release@v1
+  #       with:
+  #         files: output.zip
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
