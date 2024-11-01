@@ -41,8 +41,7 @@ jobs:
         run: |
           echo "Downloading kernel source"
           curl -O https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.6.58.tar.xz
-          mkdir -pv /tmp/linux-6.6.58
-          tar xvf linux-6.6.58.tar.xz -C /tmp/linux-6.6.58
+          tar xvf linux-6.6.58.tar.xz -C /tmp/
           cp abuild/qemu-kernel-build/src/qemu-kernel-config /tmp/linux-6.6.58/.config
 
       - name: Build kernel
