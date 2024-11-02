@@ -1,4 +1,3 @@
 --action-offline-mode
--P local=-self-hosted
--W acts/main.yml
+-P ubuntu-latest=-self-hosted
 --artifact-server-path /tmp/act_artifacts2

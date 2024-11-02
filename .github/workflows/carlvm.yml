@@ -150,8 +150,6 @@ jobs:
           if [ ! -f "${CACHEDIR}/alpine-minirootfs-${ALPINEVER}-x86_64.tar.gz" ]; then
             curl -o "${CACHEDIR}/alpine-minirootfs-${ALPINEVER}-x86_64.tar.gz" "https://dl-cdn.alpinelinux.org/alpine/latest-stable/releases/x86_64/alpine-minirootfs-${ALPINEVER}-x86_64.tar.gz"
           fi
-          echo "Alpine rootfs is available at ${CACHEDIR}/alpine-minirootfs-${ALPINEVER}-x86_64"
-          du -sh "${CACHEDIR}/alpine-minirootfs-${ALPINEVER}-x86_64"
 
       - name: prep directory
         run: |
@@ -162,6 +160,8 @@ jobs:
           tar xf "${CACHEDIR}/alpine-minirootfs-${ALPINEVER}-x86_64.tar.gz" -C "${CACHEDIR}/alpine-minirootfs-${ALPINEVER}-x86_64"
           touch "${CACHEDIR}/alpine-minirootfs-${ALPINEVER}-x86_64/prep"
           ls -la "${CACHEDIR}/alpine-minirootfs-${ALPINEVER}-x86_64"
+          echo "Alpine rootfs is available at ${CACHEDIR}/alpine-minirootfs-${ALPINEVER}-x86_64"
+          du -sh "${CACHEDIR}/alpine-minirootfs-${ALPINEVER}-x86_64"
 
       - name: download dumb-init
         uses: actions/download-artifact@v4
@@ -175,15 +175,19 @@ jobs:
           name: dumb-exit
           path: "${{ env.CACHEDIR }}/alpine-minirootfs-${{ env.ALPINEVER }}-x86_64/dumb-exit"
 
+      - name: ls alpine-minirootfs
+        run: ls -la "${CACHEDIR}/alpine-minirootfs-${ALPINEVER}-x86_64"
+
       - name: Prepare rootfs
         run: |
-          chmod +x "${CACHEDIR}/alpine-minirootfs-${ALPINEVER}-x86_64"/dumb-init
-          chmod +x "${CACHEDIR}/alpine-minirootfs-${ALPINEVER}-x86_64"/dumb-exit
-          cp "${SRCDIR}/overlay/init" "${CACHEDIR}/alpine-minirootfs-${ALPINEVER}-x86_64"/init
-          chmod +x "${CACHEDIR}/alpine-minirootfs-${ALPINEVER}-x86_64"/init
-          cd "${CACHEDIR}/alpine-minirootfs-${ALPINEVER}-x86_64"
-          find . | cpio -o -H newc > "${CACHEDIR}/alpine-minirootfs-${ALPINEVER}-x86_64.cpio"
-          ls -la "${CACHEDIR}/alpine-minirootfs-${ALPINEVER}-x86_64.cpio"
+          chmod +x "${CACHEDIR}/alpine-minirootfs-${ALPINEVER}-x86_64/dumb-init"
+          chmod +x "${CACHEDIR}/alpine-minirootfs-${ALPINEVER}-x86_64/dumb-exit"
+          cp "${SRCDIR}/overlay/init" "${CACHEDIR}/alpine-minirootfs-${ALPINEVER}-x86_64/init"
+          chmod +x "${CACHEDIR}/alpine-minirootfs-${ALPINEVER}-x86_64/init"
+          find "${CACHEDIR}/alpine-minirootfs-${ALPINEVER}-x86_64" | cpio -o -H newc > "${CACHEDIR}/alpine-minirootfs-${ALPINEVER}-x86_64.cpio"
+
+      - name: ls CACHEDIR
+        run: ls -la "${CACHEDIR}"
 
       - name: Upload alpine rootfs artifact
         uses: actions/upload-artifact@v4
@@ -246,3 +250,11 @@ jobs:
           name: carlvm
           path: "${{ env.CACHEDIR }}/carlvm"
           # /tmp/act_artifacts2/1/carlvm/carlvm.zip
+
+      - name: show local artifacts
+        run: |
+          if [ -d /tmp/act_artifacts2/1/carlvm ]; then
+            ls -la /tmp/act_artifacts2/1/carlvm
+          else 
+            echo "no tmp artifacts on gh runner"
+          fi
