@@ -13,41 +13,40 @@ env:
   ALPINEVER: 3.20.3
 
 jobs:
-  install_deps:
-    runs-on: ubuntu-latest
+  # install_deps:
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - name: Install dependencies
-        run: |
-          if grep -q '^ID=ubuntu$' /etc/os-release; then
-            if ! which musl-gcc; then
-              sudo apt-get update && sudo apt-get install -y musl-tools
-            fi
-            if ! which qemu-system-x86_64; then
-              sudo apt-get update && sudo apt-get install -y qemu-system-x86
-            fi
-            if ! which curl; then
-              sudo apt-get update && sudo apt-get install -y curl
-            fi
-            if ! which strip; then
-              sudo apt-get update && sudo apt-get install -y binutils
-            fi
-            if ! which gcc; then
-              sudo apt-get update && sudo apt-get install -y gcc make build-essential perl dkms
-            fi
-            if dpkg-query -W -f='${Status}' libelf-dev 2>/dev/null | grep -q "install ok installed"; then
-              echo "libelf-dev is installed"
-            else
-              sudo apt-get update && sudo apt-get install -y libelf-dev perl dkms
-            fi
-          else
-            echo "add your package installer commands here"
-            exit 1
-          fi
+  #   steps:
+  #     - name: Install dependencies
+  #       run: |
+  #         if grep -q '^ID=ubuntu$' /etc/os-release; then
+  #           if ! which musl-gcc; then
+  #             sudo apt-get update && sudo apt-get install -y musl-tools
+  #           fi
+  #           if ! which qemu-system-x86_64; then
+  #             sudo apt-get update && sudo apt-get install -y qemu-system-x86
+  #           fi
+  #           if ! which curl; then
+  #             sudo apt-get update && sudo apt-get install -y curl
+  #           fi
+  #           if ! which strip; then
+  #             sudo apt-get update && sudo apt-get install -y binutils
+  #           fi
+  #           if ! which gcc; then
+  #             sudo apt-get update && sudo apt-get install -y gcc make build-essential perl dkms
+  #           fi
+  #           if dpkg-query -W -f='${Status}' libelf-dev 2>/dev/null | grep -q "install ok installed"; then
+  #             echo "libelf-dev is installed"
+  #           else
+  #             sudo apt-get update && sudo apt-get install -y libelf-dev perl dkms
+  #           fi
+  #         else
+  #           echo "add your package installer commands here"
+  #           exit 1
+  #         fi
 
   build_dumb_init:
     runs-on: ubuntu-latest
-    needs: install_deps
 
     steps:
       - name: Checkout repository
@@ -71,7 +70,6 @@ jobs:
 
   build_dumb_exit:
     runs-on: ubuntu-latest
-    needs: install_deps
 
     steps:
       - name: Checkout repository
@@ -95,7 +93,6 @@ jobs:
 
   build_kernel:
     runs-on: ubuntu-latest
-    needs: install_deps
 
     steps:
       - name: Checkout repository
@@ -138,7 +135,7 @@ jobs:
 
   build_alpine_rootfs:
     runs-on: ubuntu-latest
-    needs: [install_deps, build_dumb_init, build_dumb_exit]
+    needs: [build_dumb_init, build_dumb_exit]
 
     steps:
       - name: Checkout repository
@@ -197,7 +194,7 @@ jobs:
 
   carlvm-build:
     runs-on: ubuntu-latest
-    needs: [install_deps, build_kernel, build_alpine_rootfs]
+    needs: [build_kernel, build_alpine_rootfs]
 
     steps:
       - name: Checkout repository
@@ -249,7 +246,6 @@ jobs:
         with:
           name: carlvm
           path: "${{ env.CACHEDIR }}/carlvm"
-          # /tmp/act_artifacts2/1/carlvm/carlvm.zip
 
       - name: show local artifacts
         run: |
