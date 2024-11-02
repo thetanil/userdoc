@@ -14,7 +14,7 @@ env:
 
 jobs:
   install_deps:
-    runs-on: [local, ubuntu-latest]
+    runs-on: ubuntu-latest
 
     steps:
       - name: Install dependencies
@@ -46,7 +46,7 @@ jobs:
           fi
 
   build_dumb_init:
-    runs-on: [local, ubuntu-latest]
+    runs-on: ubuntu-latest
     needs: install_deps
 
     steps:
@@ -66,7 +66,7 @@ jobs:
           path: "${{ env.BUILDDIR }}/dumb-init/dumb-init"
 
   build_dumb_exit:
-    runs-on: [local, ubuntu-latest]
+    runs-on: ubuntu-latest
     needs: install_deps
 
     steps:
@@ -86,7 +86,7 @@ jobs:
           path: "${{ env.BUILDDIR }}/dumb-exit/dumb-exit"
 
   cache_kernel_source:
-    runs-on: [local, ubuntu-latest]
+    runs-on: ubuntu-latest
     needs: install_deps
 
     steps:
@@ -101,7 +101,7 @@ jobs:
           du -sh "${CACHEDIR}/linux-${KERNELVER}"
 
   build_kernel:
-    runs-on: [local, ubuntu-latest]
+    runs-on: ubuntu-latest
     needs: [install_deps, cache_kernel_source]
 
     steps:
@@ -125,7 +125,7 @@ jobs:
           path: "${{ env.CACHEDIR }}/linux-${{ env.KERNELVER }}/arch/x86/boot/bzImage"
 
   build_alpine_rootfs:
-    runs-on: [local, ubuntu-latest]
+    runs-on: ubuntu-latest
     needs: [install_deps, build_dumb_init, build_dumb_exit]
 
     steps:
@@ -179,7 +179,7 @@ jobs:
           path: "${{ env.CACHEDIR }}/alpine-minirootfs-${{ env.ALPINEVER }}-x86_64.cpio"
 
   carlvm-build:
-    runs-on: [local, ubuntu-latest]
+    runs-on: ubuntu-latest
     needs: [install_deps, build_kernel, build_alpine_rootfs]
 
     steps:
