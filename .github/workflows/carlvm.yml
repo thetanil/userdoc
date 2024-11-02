@@ -241,6 +241,14 @@ jobs:
       - name: ls carlvm
         run: ls -la "${CACHEDIR}/carlvm"
 
+      - name: show local artifacts
+        run: |
+          if [ -d /tmp/act_artifacts/1/carlvm ]; then
+            rm -rf /tmp/act_artifacts/1/carlvm
+          else 
+            echo "no tmp artifacts on gh runner"
+          fi
+
       - name: Upload carlvm artifact
         uses: actions/upload-artifact@v4
         with:
@@ -250,7 +258,7 @@ jobs:
       - name: show local artifacts
         run: |
           if [ -d /tmp/act_artifacts/1/carlvm ]; then
-            ls -la /tmp/act_artifacts/1/carlvm
+            find /tmp/act_artifacts/1/carlvm -type f
           else 
             echo "no tmp artifacts on gh runner"
           fi
