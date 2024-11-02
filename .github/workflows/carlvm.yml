@@ -83,7 +83,7 @@ jobs:
           if ! which musl-gcc; then
             sudo apt-get update && sudo apt-get install -y musl-tools
           fi
-          mkdir -p "${BUILDDIR}/dumb-exit"
+          mkdir -pv "${BUILDDIR}/dumb-exit"
           musl-gcc -O2 "${SRCDIR}/dumb-exit/dumb-exit.c" -o "${BUILDDIR}/dumb-exit/dumb-exit"
           strip --strip-all "${BUILDDIR}/dumb-exit/dumb-exit"
 
@@ -93,32 +93,27 @@ jobs:
           name: dumb-exit
           path: "${{ env.BUILDDIR }}/dumb-exit/dumb-exit"
 
-  cache_kernel_source:
-    runs-on: ubuntu-latest
-    needs: install_deps
-
-    steps:
-      - name: download kernel source
-        run: |
-          mkdir -p "${CACHEDIR}"
-          if [ ! -f "${CACHEDIR}/linux-${KERNELVER}.tar.xz" ]; then
-            curl -o "${CACHEDIR}/linux-${KERNELVER}.tar.xz" "https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-${KERNELVER}.tar.xz"
-            tar xf "${CACHEDIR}/linux-${KERNELVER}.tar.xz" -C "${CACHEDIR}"
-          fi
-          echo "Kernel source is available at ${CACHEDIR}/linux-${KERNELVER}"
-          du -sh "${CACHEDIR}/linux-${KERNELVER}"
-
   build_kernel:
     runs-on: ubuntu-latest
-    needs: [install_deps, cache_kernel_source]
+    needs: install_deps
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Copy kernel config
+      - name: download kernel source
         run: |
-          cp "${SRCDIR}/qemu-kernel-config" "${CACHEDIR}/linux-${KERNELVER}"/.config
+          mkdir -pv "${CACHEDIR}"
+          if [ ! -f "${CACHEDIR}/linux-${KERNELVER}.tar.xz" ]; then
+            curl -o "${CACHEDIR}/linux-${KERNELVER}.tar.xz" "https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-${KERNELVER}.tar.xz"
+          fi
+
+      - name: extract and copy kernel config
+        run: |
+          tar xf "${CACHEDIR}/linux-${KERNELVER}.tar.xz" -C "${CACHEDIR}"
+          echo "Kernel source is available at ${CACHEDIR}/linux-${KERNELVER}"
+          du -sh "${CACHEDIR}/linux-${KERNELVER}"
+          cp "${SRCDIR}/qemu-kernel-config" "${CACHEDIR}/linux-${KERNELVER}/.config"
 
       - name: Build kernel
         run: |
