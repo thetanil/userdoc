@@ -231,7 +231,7 @@ jobs:
           echo "CACHEDIR: ${CACHEDIR}"
           if [ -d "carlvm/zip" ]; then
             ls -lha carlvm/zip
-            cp -r carlvm/zip/* "${CACHEDIR}/carlvm/"
+            cp -a carlvm/zip/. "${CACHEDIR}/carlvm/"
           else
             echo "Directory carlvm/zip does not exist."
             exit 1
@@ -249,8 +249,8 @@ jobs:
 
       - name: show local artifacts
         run: |
-          if [ -d /tmp/act_artifacts2/1/carlvm ]; then
-            ls -la /tmp/act_artifacts2/1/carlvm
+          if [ -d /tmp/act_artifacts/1/carlvm ]; then
+            ls -la /tmp/act_artifacts/1/carlvm
           else 
             echo "no tmp artifacts on gh runner"
           fi

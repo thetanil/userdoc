@@ -17,9 +17,9 @@ ensure_act() {
 ensure_act
 
 # actrc is already configured to use this dir
-mkdir -p /tmp/act_artifacts2
+mkdir -p /tmp/act_artifacts
 
 # suppresses log messages
-# act | grep --color=always -v '::'
-act
+act | grep --color=always -v '::'
+# act
 
