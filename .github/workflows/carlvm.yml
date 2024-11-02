@@ -8,7 +8,7 @@ on:
 env:
   SRCDIR: carlvm/src
   BUILDDIR: build/carlvm
-  CACHEDIR: /tmp/build/cache
+  CACHEDIR: build/cache
   KERNELVER: 6.6.58
   ALPINEVER: 3.20.3
 
@@ -148,9 +148,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
       - name: Download alpine rootfs
         run: |
-          mkdir -p "${CACHEDIR}"
+          mkdir -pv "${CACHEDIR}"
           if [ ! -f "${CACHEDIR}/alpine-minirootfs-${ALPINEVER}-x86_64.tar.gz" ]; then
             curl -o "${CACHEDIR}/alpine-minirootfs-${ALPINEVER}-x86_64.tar.gz" "https://dl-cdn.alpinelinux.org/alpine/latest-stable/releases/x86_64/alpine-minirootfs-${ALPINEVER}-x86_64.tar.gz"
           fi
