@@ -21,3 +21,6 @@ jobs:
         run: |
           echo "TIMEFORMAT: ${{ env.TIMEFORMAT }}"
           time echo "CI: ${{ env.CI }}"
+
+  carlvm-build:
+    uses: ./acts/actions/carlvm_build.yml

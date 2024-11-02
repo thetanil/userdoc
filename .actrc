@@ -1,3 +1,4 @@
 --action-offline-mode
 -P local=-self-hosted
 -W acts/main.yml
+--artifact-server-path /tmp/act_artifacts2
