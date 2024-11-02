@@ -211,8 +211,10 @@ jobs:
 
       - name: copy zip dir to build dir
         run: |
+          pwd
+          ls -lha
           # mkdir -p "${BUILDDIR}/carlvm"
-          cp -r "${SRCDIR}/zip/*" "${BUILDDIR}/carlvm/"
+          cp -r "${SRCDIR}/../zip/*" "${BUILDDIR}/carlvm/"
           # cp alpine-minirootfs-${ALPINEVER}-x86_64 "${BUILDDIR}/carlvm/alpine-rootfs.cpio"
           # exit 1
           # cp bzImage "${BUILDDIR}/carlvm/bzImage"
