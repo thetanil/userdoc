@@ -6,6 +6,7 @@ bin/act
 bin/hugo
 bin/ninja
 bin/task
+build/
 site/public/
 abuild/alpine-standard-3.20.3-x86_64.iso
 abuild/alpine.qcow2
@@ -24,3 +25,5 @@ abuild/qemu-kernel-build/linux-6.6.58
 
 abuild/qemu-kernel-build/src/dumb-init/dumb-init
 abuild/qemu-kernel-build/src/overlay/dumb-init
+chimera/chimera_rootfs.qcow2
+
