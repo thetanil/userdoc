@@ -1,7 +1,9 @@
 name: carlvm-build
 
 on:
-  workflow_call:
+  push:
+    branches:
+      - main
 
 env:
   SRCDIR: carlvm/src
