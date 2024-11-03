@@ -49,11 +49,18 @@ jobs:
           draft: false
           prerelease: false
 
-      - name: ls carlvm zip
+      - name: ls carlvm to zip
+        working-directory: ./build
         run: |
-          ls -la build/carlvm-${{ github.event.inputs.tag_name }}
-          zip -r build/carlvm-${{ github.event.inputs.tag_name }}.zip build/carlvm-${{ github.event.inputs.tag_name }}
-          cat build/carlvm-${{ github.event.inputs.tag_name }}/qrun.sh build/carlvm-${{ github.event.inputs.tag_name }}.zip > build/carlvm-${{ github.event.inputs.tag_name }}.vm
+          ls -la carlvm-${{ github.event.inputs.tag_name }}
+
+      - name: zip carlvm
+        working-directory: ./build/carlvm-${{ github.event.inputs.tag_name }}
+        run: |
+          chmod +x execzip.sh
+          chmod +x qrun.sh
+          zip -r ../carlvm.zip .
+          cat execzip.sh ../carlvm.zip > ../carl.vm
           chmod +x build/carlvm-${{ github.event.inputs.tag_name }}.vm
 
       - name: Upload Release Asset
