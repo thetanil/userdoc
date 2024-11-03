@@ -11,5 +11,6 @@ cat <<EOF
  ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚══════╝
                                                  
 EOF
+echo $(uname -a)
 /dumb-init /bin/sh
 /carl-exit
