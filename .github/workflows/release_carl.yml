@@ -61,7 +61,7 @@ jobs:
           chmod +x qrun.sh
           zip -r ../carlvm.zip .
           cat execzip.sh ../carlvm.zip > ../carl.vm
-          chmod +x build/carlvm-${{ github.event.inputs.tag_name }}.vm
+          chmod +x build/carl.vm
 
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
