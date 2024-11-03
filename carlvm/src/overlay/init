@@ -2,5 +2,5 @@
 mount -t devtmpfs devtmpfs /dev
 mount -t proc none /proc
 mount -t sysfs none /sys
-/dumb-init dialog --title "Hello" --msgbox "Hello, World!" 8 40 
+/dumb-init /bin/sh
 /dumb-exit 0
