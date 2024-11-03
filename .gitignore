@@ -29,3 +29,4 @@ chimera/chimera_rootfs.qcow2
 
 carlvm/src/dumb-init/dumb-init
 chimera_rootfs.qcow2
+carl.vm

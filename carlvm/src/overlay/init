@@ -3,5 +3,9 @@ echo "init"
 mount -t devtmpfs devtmpfs /dev
 mount -t proc none /proc
 mount -t sysfs none /sys
+echo "dumb init"
 /dumb-init /bin/sh
+echo "dumb exit"
+echo "TODO: use dumb-down"
 /dumb-exit 0
+echo "exit"

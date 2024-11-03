@@ -12,3 +12,5 @@ qemu-system-x86_64 \
           -device isa-debug-exit \
           -enable-kvm  \
           -nographic
+
+echo "qrun.sh done"

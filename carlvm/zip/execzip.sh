@@ -6,4 +6,6 @@ unzip -q ./carl.vm -d "$TMPDIR"
 cd "$TMPDIR"
 ./qrun.sh
 rm -rf "$TMPDIR"
-exit 0
+echo "zip script done"
+return 0
+
