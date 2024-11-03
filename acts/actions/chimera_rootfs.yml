@@ -1,0 +1,105 @@
+name: chimera_rootfs
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  SRCDIR: carlvm/src
+  BUILDDIR: build/carlvm
+  CACHEDIR: build/cache
+  TMPDIR: unset
+  KERNELVER: 6.6.58
+  ALPINEVER: 3.20.3
+  IMAGE_FILE: chimera_rootfs.raw
+  QCOW2_FILE: chimera_rootfs.qcow2
+  MOUNT_POINT: /mnt/loop
+
+jobs:
+  make_qcow2:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: qemu-img Create
+        working-directory: build/cache
+        run: |
+          curl -o chimera-bootstrap.tar.gz https://repo.chimera-linux.org/live/latest/chimera-linux-x86_64-ROOTFS-20241027-bootstrap.tar.gz
+          # Variables
+
+          # Create a raw disk image
+          dd if=/dev/zero of="$IMAGE_FILE" bs=1M count=1024
+
+          # Set up a loop device
+          LOOP_DEVICE=$(sudo losetup --show -fP "$IMAGE_FILE")
+
+          # Format the loop device with ext4 filesystem
+          sudo mkfs.ext4 "$LOOP_DEVICE"
+
+          # Create a mount point
+          sudo mkdir -pv "$MOUNT_POINT"
+
+          # Mount the loop device
+          sudo mount "$LOOP_DEVICE" "$MOUNT_POINT"
+
+          # Create a test file
+          sudo touch "$MOUNT_POINT/testfile"
+
+          # Optionally extract tarball (uncomment if needed)
+          sudo tar -xzf chimera-bootstrap.tar.gz -C "$MOUNT_POINT"
+
+          # Unmount the loop device
+          sudo umount "$MOUNT_POINT"
+
+          # Detach the loop device
+          sudo losetup -d "$LOOP_DEVICE"
+
+          # Convert the raw image to qcow2 format
+          qemu-img convert -f raw -O qcow2 "$IMAGE_FILE" "$QCOW2_FILE"
+
+          # Clean up
+          rm -f "$IMAGE_FILE"
+
+      - name: Verify qcow2 image
+        working-directory: build/cache
+        run: |
+          qemu-img convert -f qcow2 -O raw "$QCOW2_FILE" "$IMAGE_FILE"
+
+          # Set up a loop device for the qcow2 image
+          LOOP_DEVICE=$(sudo losetup --show -fP "$IMAGE_FILE")
+
+          # Create a mount point
+          sudo mkdir -pv "$MOUNT_POINT"
+
+          # Mount the loop device
+          sudo mount "$LOOP_DEVICE" "$MOUNT_POINT"
+
+          # Verify the mount
+          echo "Mounted qcow2 image at $MOUNT_POINT"
+          ls -la "$MOUNT_POINT"
+
+          # Unmount the loop device
+          sudo umount "$MOUNT_POINT"
+
+          # Detach the loop device
+          sudo losetup -d "$LOOP_DEVICE"
+
+      - name: Upload qcow2 artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: chimera_rootfs
+          path: "build/cache/${{ env.QCOW2_FILE }}"
+
+          # qemu-img create -f qcow2 -o size=1G chimera_rootfs.qcow2
+          # sudo modprobe nbd max_part=8
+          # sudo qemu-nbd --connect=/dev/nbd0 chimera_rootfs.qcow2
+          # sudo mkfs.ext4 /dev/nbd0
+          # sudo mkdir -pv /mnt/nbd0
+          # sudo mount /dev/nbd0 /mnt/nbd0
+          # touch /mnt/nbd0/testfile
+          # # # sudo tar -xzf chimera.tar.gz -C /mnt
+          # sudo umount /mnt
+          # sudo qemu-nbd --disconnect /dev/nbd0
