@@ -14,7 +14,4 @@ env:
 
 jobs:
   build-carlvm:
-    runs-on: ubuntu-latest
-    steps:
-      - name: build carlvm
-        uses: thetanil/userdoc/.github/workdflows/actions/build_carlvm@main
+    uses: ./.github/workflows/actions/build_carlvm/action.yml

@@ -11,15 +11,16 @@ on:
         required: true
 
 jobs:
-  build:
+  build-carlvm:
+    uses: ./.github/workflows/actions/build_carlvm/action.yml
+
+  create_release:
     runs-on: ubuntu-latest
+    needs: build-carlvm
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: carlvm
-        uses: ./.github/workflows/carlvm.yml
+        uses: actions/checkout@v4
 
       - name: Create Tag
         run: |
@@ -29,6 +30,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create Release
+        id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -44,6 +46,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: $BUILDDIR/carlvm
+          asset_path: ${{ env.BUILDDIR }}/carlvm
           asset_name: carlvm
           asset_content_type: application/octet-stream
