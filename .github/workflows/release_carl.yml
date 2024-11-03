@@ -25,6 +25,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Download carlvm artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: carlvm
+
       - name: Create Tag
         run: |
           git tag ${{ github.event.inputs.tag_name }}
