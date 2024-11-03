@@ -12,7 +12,7 @@ on:
 
 jobs:
   build-carlvm:
-    uses: ./.github/workflows/actions/build_carlvm/action.yml
+    uses: .github/workflows/actions/build_carlvm/action.yml
 
   create_release:
     runs-on: ubuntu-latest
