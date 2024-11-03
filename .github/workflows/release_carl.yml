@@ -70,5 +70,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: build/carl.vm
-          asset_name: carlvm.vm
+          asset_name: carl.vm
           asset_content_type: application/octet-stream
