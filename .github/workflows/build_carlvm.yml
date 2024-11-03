@@ -2,27 +2,6 @@ name: build-carlvm
 
 on:
   workflow_call:
-    # inputs:
-    #   build_dumb_init:
-    #     type: boolean
-    #     description: "Build dumb-init"
-    #     required: false
-    #   build_dumb_exit:
-    #     type: boolean
-    #     description: "Build dumb-exit"
-    #     required: false
-    #   build_kernel:
-    #     type: boolean
-    #     description: "Build kernel"
-    #     required: false
-    #   build_alpine_rootfs:
-    #     type: boolean
-    #     description: "Build alpine rootfs"
-    #     required: false
-    #   carlvm-build:
-    #     type: boolean
-    #     description: "Build carlvm"
-    #     required: false
 
 env:
   SRCDIR: carlvm/src
@@ -54,29 +33,6 @@ jobs:
         with:
           name: dumb-init
           path: "${{ env.BUILDDIR }}/dumb-init/dumb-init"
-
-  build_dumb_exit:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: musl-gcc compile and strip
-        run: |
-          # TODO NOT LIKE THIS
-          if ! which musl-gcc; then
-            sudo apt-get update && sudo apt-get install -y musl-tools
-          fi
-          mkdir -pv "${BUILDDIR}/dumb-exit"
-          musl-gcc -O2 "${SRCDIR}/dumb-exit/dumb-exit.c" -o "${BUILDDIR}/dumb-exit/dumb-exit"
-          strip --strip-all "${BUILDDIR}/dumb-exit/dumb-exit"
-
-      - name: Upload dumb-exit artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: dumb-exit
-          path: "${{ env.BUILDDIR }}/dumb-exit/dumb-exit"
 
   build_carl_exit:
     runs-on: ubuntu-latest
@@ -182,12 +138,6 @@ jobs:
           name: dumb-init
           path: "${{ env.CACHEDIR }}/alpine-minirootfs-${{ env.ALPINEVER }}-x86_64"
 
-      - name: download dumb-exit
-        uses: actions/download-artifact@v4
-        with:
-          name: dumb-exit
-          path: "${{ env.CACHEDIR }}/alpine-minirootfs-${{ env.ALPINEVER }}-x86_64"
-
       - name: download carl-exit
         uses: actions/download-artifact@v4
         with:
@@ -202,7 +152,6 @@ jobs:
         working-directory: "${{ env.CACHEDIR }}/alpine-minirootfs-${{ env.ALPINEVER }}-x86_64"
         run: |
           chmod +x ./dumb-init
-          chmod +x ./dumb-exit
           chmod +x ./carl-exit
           cp "$GITHUB_WORKSPACE/${SRCDIR}/overlay/init" ./init
           chmod +x ./init
