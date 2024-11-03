@@ -61,7 +61,7 @@ jobs:
           chmod +x qrun.sh
           zip -r ../carlvm.zip .
           cat execzip.sh ../carlvm.zip > ../carl.vm
-          chmod +x build/carl.vm
+          chmod +x ../carl.vm
 
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
@@ -69,6 +69,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: build/carlvm-${{ github.event.inputs.tag_name }}.vm
-          asset_name: carlvm-${{ github.event.inputs.tag_name }}.vm
+          asset_path: build/carl.vm
+          asset_name: carlvm.vm
           asset_content_type: application/octet-stream
