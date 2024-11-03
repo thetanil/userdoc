@@ -25,11 +25,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Download carlvm artifact
+      - name: Download carl.vm artifact
         uses: actions/download-artifact@v4
         with:
-          name: carlvm
-          path: ./build/carlvm-${{ github.event.inputs.tag_name }}
+          name: carl.vm
+          path: ./build/
 
       - name: Create Tag
         run: |
@@ -53,16 +53,7 @@ jobs:
       - name: ls carlvm to zip
         working-directory: ./build
         run: |
-          ls -la carlvm-${{ github.event.inputs.tag_name }}
-
-      - name: zip carlvm
-        working-directory: ./build/carlvm-${{ github.event.inputs.tag_name }}
-        run: |
-          chmod +x execzip.sh
-          chmod +x qrun.sh
-          zip -r ../carlvm.zip .
-          cat execzip.sh ../carlvm.zip > ../carl.vm
-          chmod +x ../carl.vm
+          ls -la
 
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1

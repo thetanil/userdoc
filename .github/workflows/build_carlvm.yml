@@ -258,6 +258,41 @@ jobs:
             echo "no tmp artifacts on gh runner"
           fi
 
+  make_exec:
+    runs-on: ubuntu-latest
+    needs: [carlvm-build]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: download carlvm artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: carlvm
+          path: build/carlvm
+
+      - name: ls carl.vm
+        working-directory: build/carlvm
+        run: |
+          ls -la
+          # exit 1
+
+      - name: zip carlvm
+        working-directory: ./build/carlvm
+        run: |
+          chmod +x execzip.sh
+          chmod +x qrun.sh
+          zip -r ../carlvm.zip .
+          cat execzip.sh ../carlvm.zip > ../carl.vm
+          chmod +x ../carl.vm
+
+      - name: Upload carl.vm
+        uses: actions/upload-artifact@v4
+        with:
+          name: carl.vm
+          path: build/carl.vm
+
   # test_carlvm:
   #   runs-on: ubuntu-latest
   #   needs: [carlvm-build]
