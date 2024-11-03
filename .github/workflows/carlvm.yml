@@ -149,42 +149,50 @@ jobs:
           fi
 
       - name: prep directory
+        working-directory: "${{ env.CACHEDIR }}"
         run: |
-          if [ -d "${CACHEDIR}/alpine-minirootfs-${ALPINEVER}-x86_64" ]; then
-            rm -rf "${CACHEDIR}/alpine-minirootfs-${ALPINEVER}-x86_64"
+          if [ -d "alpine-minirootfs-${ALPINEVER}-x86_64" ]; then
+            rm -rf "alpine-minirootfs-${ALPINEVER}-x86_64"
           fi
-          mkdir -p "${CACHEDIR}/alpine-minirootfs-${ALPINEVER}-x86_64"
-          tar xf "${CACHEDIR}/alpine-minirootfs-${ALPINEVER}-x86_64.tar.gz" -C "${CACHEDIR}/alpine-minirootfs-${ALPINEVER}-x86_64"
-          touch "${CACHEDIR}/alpine-minirootfs-${ALPINEVER}-x86_64/prep"
-          ls -la "${CACHEDIR}/alpine-minirootfs-${ALPINEVER}-x86_64"
-          echo "Alpine rootfs is available at ${CACHEDIR}/alpine-minirootfs-${ALPINEVER}-x86_64"
-          du -sh "${CACHEDIR}/alpine-minirootfs-${ALPINEVER}-x86_64"
+          mkdir -p "alpine-minirootfs-${ALPINEVER}-x86_64"
+          tar xf "alpine-minirootfs-${ALPINEVER}-x86_64.tar.gz" -C "alpine-minirootfs-${ALPINEVER}-x86_64"
+          du -sh "alpine-minirootfs-${ALPINEVER}-x86_64"
 
       - name: download dumb-init
         uses: actions/download-artifact@v4
         with:
           name: dumb-init
-          path: "${{ env.CACHEDIR }}/alpine-minirootfs-${{ env.ALPINEVER }}-x86_64/dumb-init"
+          path: "${{ env.CACHEDIR }}/alpine-minirootfs-${{ env.ALPINEVER }}-x86_64"
 
       - name: download dumb-exit
         uses: actions/download-artifact@v4
         with:
           name: dumb-exit
-          path: "${{ env.CACHEDIR }}/alpine-minirootfs-${{ env.ALPINEVER }}-x86_64/dumb-exit"
+          path: "${{ env.CACHEDIR }}/alpine-minirootfs-${{ env.ALPINEVER }}-x86_64"
 
       - name: ls alpine-minirootfs
-        run: ls -la "${CACHEDIR}/alpine-minirootfs-${ALPINEVER}-x86_64"
+        working-directory: "${{ env.CACHEDIR }}/alpine-minirootfs-${{ env.ALPINEVER }}-x86_64"
+        run: ls -la
 
       - name: Prepare rootfs
+        working-directory: "${{ env.CACHEDIR }}/alpine-minirootfs-${{ env.ALPINEVER }}-x86_64"
         run: |
-          chmod +x "${CACHEDIR}/alpine-minirootfs-${ALPINEVER}-x86_64/dumb-init"
-          chmod +x "${CACHEDIR}/alpine-minirootfs-${ALPINEVER}-x86_64/dumb-exit"
-          cp "${SRCDIR}/overlay/init" "${CACHEDIR}/alpine-minirootfs-${ALPINEVER}-x86_64/init"
-          chmod +x "${CACHEDIR}/alpine-minirootfs-${ALPINEVER}-x86_64/init"
-          find "${CACHEDIR}/alpine-minirootfs-${ALPINEVER}-x86_64" | cpio -o -H newc > "${CACHEDIR}/alpine-minirootfs-${ALPINEVER}-x86_64.cpio"
+          chmod +x ./dumb-init
+          chmod +x ./dumb-exit
+          cp "$GITHUB_WORKSPACE/${SRCDIR}/overlay/init" ./init
+          chmod +x ./init
 
-      - name: ls CACHEDIR
-        run: ls -la "${CACHEDIR}"
+      - name: ls cpio content
+        working-directory: "${{ env.CACHEDIR }}/alpine-minirootfs-${{ env.ALPINEVER }}-x86_64"
+        run: ls -la
+
+      - name: cpio content
+        working-directory: "${{ env.CACHEDIR }}/alpine-minirootfs-${{ env.ALPINEVER }}-x86_64"
+        run: find . | cpio -o -H newc > "../alpine-minirootfs-${ALPINEVER}-x86_64.cpio"
+
+      - name: ls cpio file
+        working-directory: "${{ env.CACHEDIR }}"
+        run: ls -la
 
       - name: Upload alpine rootfs artifact
         uses: actions/upload-artifact@v4
@@ -262,3 +270,20 @@ jobs:
           else 
             echo "no tmp artifacts on gh runner"
           fi
+
+  # test_carlvm:
+  #   runs-on: ubuntu-latest
+  #   needs: [carlvm-build]
+
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v4
+
+  #     - name: download carlvm artifact
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         name: carlvm
+
+  #     - name: mount cpio
+  #       run: |
+  #         ls -la

@@ -24,3 +24,6 @@ jobs:
 
   carlvm-build:
     uses: ./acts/actions/carlvm_build.yml
+
+  genqcow2:
+    uses: ./acts/actions/genqcow2.yml
