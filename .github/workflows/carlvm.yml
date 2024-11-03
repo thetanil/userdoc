@@ -14,4 +14,4 @@ env:
 
 jobs:
   build-carlvm:
-    uses: ./.github/workflows/actions/build_carlvm/action.yml
+    uses: ./.github/workflows/build_carlvm.yml
