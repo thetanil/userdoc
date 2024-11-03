@@ -1,10 +1,14 @@
 #!/bin/sh
 # Self-extracting archive script
-echo "Extracting..."
+# unzip -q ./carl.vm -d "$TMPDIR"
+# echo "Extracting..."
 TMPDIR=$(mktemp -d)
-unzip -q ./carl.vm -d "$TMPDIR"
+#
+# THIS MAGIC NUMBER MUST MATCH FILE LENGTH FROM THE TAIL COMMAND
+#
+tail -n +$((LINENO + 6)) "$0" > "$TMPDIR/vm.zip"
 cd "$TMPDIR"
+unzip vm.zip
 ./qrun.sh
 rm -rf "$TMPDIR"
-return 0
-
+exit

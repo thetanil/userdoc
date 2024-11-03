@@ -78,6 +78,37 @@ jobs:
           name: dumb-exit
           path: "${{ env.BUILDDIR }}/dumb-exit/dumb-exit"
 
+  build_carl_exit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: musl-gcc compile and strip
+        run: |
+          # TODO NOT LIKE THIS
+          if ! which musl-gcc; then
+            sudo apt-get update && sudo apt-get install -y musl-tools
+          fi
+          if ! which nasm; then
+            sudo apt-get update && sudo apt-get install -y nasm
+          fi
+          mkdir -pv "build/carl-exit"
+
+      - name: build carl-exit
+        working-directory: carlvm/src/carl-exit
+        run: |
+          nasm -felf64 carl-exit.asm -o carl-exit.o
+          ld -z noseparate-code -s -static -nostdlib -o carl-exit carl-exit.o
+          strip carl-exit
+
+      - name: Upload carl-exit artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: carl-exit
+          path: carlvm/src/carl-exit/carl-exit
+
   build_kernel:
     runs-on: ubuntu-latest
 
@@ -122,7 +153,7 @@ jobs:
 
   build_alpine_rootfs:
     runs-on: ubuntu-latest
-    needs: [build_dumb_init, build_dumb_exit]
+    needs: [build_dumb_init, build_dumb_exit, build_carl_exit]
 
     steps:
       - name: Checkout repository
@@ -157,6 +188,12 @@ jobs:
           name: dumb-exit
           path: "${{ env.CACHEDIR }}/alpine-minirootfs-${{ env.ALPINEVER }}-x86_64"
 
+      - name: download carl-exit
+        uses: actions/download-artifact@v4
+        with:
+          name: carl-exit
+          path: "${{ env.CACHEDIR }}/alpine-minirootfs-${{ env.ALPINEVER }}-x86_64"
+
       - name: ls alpine-minirootfs
         working-directory: "${{ env.CACHEDIR }}/alpine-minirootfs-${{ env.ALPINEVER }}-x86_64"
         run: ls -la
@@ -166,6 +203,7 @@ jobs:
         run: |
           chmod +x ./dumb-init
           chmod +x ./dumb-exit
+          chmod +x ./carl-exit
           cp "$GITHUB_WORKSPACE/${SRCDIR}/overlay/init" ./init
           chmod +x ./init
 
@@ -284,7 +322,8 @@ jobs:
           chmod +x execzip.sh
           chmod +x qrun.sh
           zip -r ../carlvm.zip .
-          cat execzip.sh ../carlvm.zip > ../carl.vm
+          cp execzip.sh ../carl.vm
+          cat ../carlvm.zip >> ../carl.vm
           chmod +x ../carl.vm
 
       - name: Upload carl.vm

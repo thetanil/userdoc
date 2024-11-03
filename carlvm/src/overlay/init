@@ -3,5 +3,4 @@ mount -t devtmpfs devtmpfs /dev
 mount -t proc none /proc
 mount -t sysfs none /sys
 /dumb-init /bin/sh
-echo "TODO: use dumb-down"
-/dumb-exit 0
+/carl-exit
