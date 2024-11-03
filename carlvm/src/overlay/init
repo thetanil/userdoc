@@ -2,7 +2,6 @@
 mount -t devtmpfs devtmpfs /dev
 mount -t proc none /proc
 mount -t sysfs none /sys
-echo tsc | tee /sys/devices/system/clocksource/clocksource0/current_clocksource
 cat <<EOF
  ██████╗ █████╗ ██████╗ ██╗      ██████╗ ███████╗
 ██╔════╝██╔══██╗██╔══██╗██║     ██╔═══██╗██╔════╝
