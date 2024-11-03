@@ -109,7 +109,7 @@ jobs:
 
   build_alpine_rootfs:
     runs-on: ubuntu-latest
-    needs: [build_dumb_init, build_dumb_exit, build_carl_exit]
+    needs: [build_dumb_init, build_carl_exit]
 
     steps:
       - name: Checkout repository
