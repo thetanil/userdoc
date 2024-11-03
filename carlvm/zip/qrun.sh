@@ -1,6 +1,7 @@
 #!/bin/bash
-#v1
 set -e
+
+echo qrun ran
 
 qemu-system-x86_64 \
           -kernel ./bzImage \
