@@ -48,6 +48,15 @@ jobs:
           draft: false
           prerelease: false
 
+      - name: ls carlvm zip
+        run: |
+          ls -la
+          if [ -d carlvm ]; then
+            ls -la carlvm
+          else
+            echo "carlvm directory does not exist."
+          fi
+
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
         env:
