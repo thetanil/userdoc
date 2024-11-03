@@ -1,0 +1,38 @@
+name: make-image
+
+on:
+  workflow_dispatch:
+    inputs:
+      arch:
+        description: "Target architecture"
+        required: true
+        default: "amd64"
+      svc:
+        description: "Service name"
+        required: true
+        default: "rescue"
+      megs:
+        description: "Size in megabytes"
+        required: true
+        default: "20"
+      img:
+        description: "Image name"
+        required: true
+        default: "rescue-${{ github.event.inputs.arch }}.img"
+      sets:
+        description: "Sets file"
+        required: true
+        default: "rescue.tar.xz"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install qemu-utils
+        run: |
+          sudo apt-get update
+          sudo apt-get install qemu-utils
