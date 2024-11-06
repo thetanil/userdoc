@@ -1,12 +1,13 @@
 #!/bin/bash
 
 qemu-system-x86_64 \
-          -kernel ./bzImage \
-          -initrd ./alpine-minirootfs-3.20.3-x86_64.cpio \
-          -append "notsc" \
-          -m 64M \
-          -cpu host \
-          -no-reboot \
-          -device isa-debug-exit \
-          -enable-kvm  \
-          -nographic
+    -display none \
+    -no-user-config \
+    -nodefaults \
+    -m 64M \
+    -serial stdio \
+    -cpu host \
+    -enable-kvm  \
+    -kernel ./bzImage \
+    -append "notsc" \
+    -initrd ./alpine-minirootfs-3.20.3-x86_64.cpio
