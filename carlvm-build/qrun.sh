@@ -13,7 +13,8 @@
     # -drive file=mydisk.qcow2,format=qcow2 \
     # -hda mydisk.qcow2 \
     # -drive format=raw,file=myimage.img \
-    # -virtfs local,path=./shared,mount_tag=hostshare,security_model=passthrough,id=hostshare
+    # -fsdev local,security_model=passthrough,id=fsdev0,path=/tmp/share \
+    # -device virtio-9p-pci,id=fs0,fsdev=fsdev0,mount_tag=hostshare
 
 qemu-system-x86_64 \
     -kernel ./bzImage \
@@ -24,8 +25,7 @@ qemu-system-x86_64 \
     -no-reboot \
     -device isa-debug-exit \
     -enable-kvm  \
-    -append "root=/dev/hda console=ttyS0" \
+    -append "root=/dev/vda console=ttyS0 nogui" \
     -nographic \
     -drive file=mydisk.qcow2,media=disk,if=virtio,cache=writeback \
-    -fsdev local,security_model=passthrough,id=fsdev0,path=/tmp/share \
-    -device virtio-9p-pci,id=fs0,fsdev=fsdev0,mount_tag=hostshare
+    -virtfs local,path=./shared,mount_tag=hostshare,security_model=passthrough,id=hostshare
