@@ -33,3 +33,4 @@ carl.vm
 carlvm-build/alpine-minirootfs-3.20.3-x86_64.cpio
 carlvm-build/bzImage
 carlvm-build/shared/chimera-linux-x86_64-ROOTFS-20241027-bootstrap.tar.gz
+carlvm-build/myimage.img
