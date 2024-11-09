@@ -1,4 +1,5 @@
-BUILD_DIR := $(shell pwd)/build
+PWD != pwd
+BUILD_DIR := $(PWD)/build
 IMAGE_FILE := $(BUILD_DIR)/disk.qcow2
 IMAGE_SIZE := "1G"
 ROOTFS_PATH := $(BUILD_DIR)/rootfs
@@ -72,6 +73,13 @@ carlvm: $(CARLVM_DIR) umount
 		-initrd $(CARLVM_DIR)/initramfs.cpio
 
 clean: umount
-	rm -f $(IMAGE_FILE) 
-	# rm -f $(ROOTFS_FILE)
-	rm -rf $(ROOTFS_PATH)
+	rm -rf $(BUILD_DIR)
+
+# chroot: $(ROOTFS_PATH)
+#     sudo mount --bind /dev $(ROOTFS_PATH)/dev
+#     sudo mount --bind /proc $(ROOTFS_PATH)/proc
+#     sudo mount --bind /sys $(ROOTFS_PATH)/sys
+#     sudo chroot $(ROOTFS_PATH) /bin/sh
+#     sudo umount $(ROOTFS_PATH)/dev
+#     sudo umount $(ROOTFS_PATH)/proc
+#     sudo umount $(ROOTFS_PATH)/sys
