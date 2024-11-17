@@ -1,0 +1,27 @@
+name: Build upinevm
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-upinevm:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          repository: diatribes/upinevm
+
+      - name: run bootstrap
+        run: |
+          ./bootstrap.sh
+
+      - name: run qrun
+        run: |
+          ./qrun.sh
