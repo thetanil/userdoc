@@ -23,7 +23,9 @@ jobs:
 
       - name: install deps
         run: |
-          sudo apt-get update && sudo apt-get install -y qemu-system-x86
+          if ! which qemu-system-x86_64; then
+            sudo apt-get update && sudo apt-get install -y qemu-system-x86
+          fi
 
       - name: get upinevm-builder artifacts
         uses: actions/download-artifact@v4
