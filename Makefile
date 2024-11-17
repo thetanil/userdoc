@@ -37,5 +37,6 @@ all: $(ACT) localdev
 
 clean:
 	if [ -d "$(UPINEVM_OUTPUTPATH)" ]; then rm -rf "$(UPINEVM_OUTPUTPATH)"; fi
+	if [ -d "$(UPINEVM_CACHEPATH)" ]; then rm -rf "$(UPINEVM_CACHEPATH)"; fi
 	rm -rf $(ACT_ARTIFACTS)
 	rm -rf $(ACT)

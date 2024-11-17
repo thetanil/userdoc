@@ -32,12 +32,15 @@ jobs:
 
       - name: run bootstrap
         run: |
+          mkdir -pv $UPINEVM_CACHEPATH
           mkdir -pv $UPINEVM_OUTPUTPATH
           if [ ! -f $UPINEVM_OUTPUTPATH/bzImage ]; then
             cd upinevm && UPINEVM_NOLAUNCH=1 ./bootstrap.sh
           fi
           echo UPINEVM_OUTPUTPATH=$UPINEVM_OUTPUTPATH
           ls -la $UPINEVM_OUTPUTPATH
+          echo UPINEVM_CACHEPATH=$UPINEVM_CACHEPATH
+          ls -la $UPINEVM_CACHEPATH
 
       # - name: run qrun
       #   run: |
