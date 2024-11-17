@@ -1,4 +1,4 @@
-name: upinevm build firstboot
+name: upinevm-builder and build-upina
 
 on:
   push:
@@ -9,10 +9,62 @@ on:
       - main
 
 jobs:
-  build:
+  build-upina:
+    runs-on: ubuntu-latest
+    needs: upinevm-builder
+    strategy:
+      matrix:
+        directory:
+          - upina/cc
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: get upinevm-builder artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: upinevm-builder
+          path: upinevm-builder
+
+      - name: copy files to input directory
+        run: |
+          ls -la upinevm-builder
+          mkdir -p upinevm-builder/input
+          cp -r ${{ matrix.directory }}/* upinevm-builder/input/
+          # set variable for build id using matrix.directory but replace / with _
+          echo "BUILD_ID=$(echo ${{ matrix.directory }} | tr / _)" >> $GITHUB_ENV
+          # echo the var in $GITHUB_ENV
+
+      - name: run upinevm
+        run: |
+          mkdir -pv upinevm-builder/output
+          qemu-system-x86_64 \
+            -display none \
+            -no-reboot \
+            -no-user-config \
+            -nodefaults \
+            -m 1g \
+            -kernel "upinevm-builder/bzImage" \
+            -nographic \
+            -serial none -device isa-serial,chardev=s1 \
+            -chardev stdio,id=s1,signal=off \
+            -append "panic=-1 notsc" \
+            -initrd "upinevm-builder/rootfs.cpio" \
+            -nic user,model=virtio-net-pci \
+            -virtfs local,path=upinevm-builder/input,mount_tag=host0,security_model=none,id=host0 \
+            -virtfs local,path=upinevm-builder/output,mount_tag=host1,security_model=none,id=host1
+          cp -r "upinevm-builder/bzImage" upinevm-builder/output/
+
+      - name: upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.BUILD_ID }}
+          path: upinevm-builder/output
+
+  upinevm-builder:
     runs-on: ubuntu-latest
     env:
-      # overriden in .env
+      # overridden in .env
       UPINEVM_CACHEPATH: /tmp/upinevm-cache-action
       UPINEVM_OUTPUTPATH: /tmp/upinevm-output-action
       UPINEVM_NOLAUNCH: 1
@@ -44,6 +96,12 @@ jobs:
           ls -la $UPINEVM_OUTPUTPATH
           echo UPINEVM_CACHEPATH=$UPINEVM_CACHEPATH
           ls -la $UPINEVM_CACHEPATH
+
+      - name: upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: upinevm-builder
+          path: ${{ env.UPINEVM_OUTPUTPATH }}
 
       # - name: run qrun
       #   run: |
