@@ -1,4 +1,4 @@
-name: Build upinevm
+name: upinevm build firstboot
 
 on:
   push:
@@ -9,14 +9,19 @@ on:
       - main
 
 jobs:
-  build-upinevm:
+  build:
     runs-on: ubuntu-latest
+    env:
+      # overriden in .env
+      UPINEVM_CACHEPATH: /tmp/upinevm-cache-action
+      UPINEVM_OUTPUTPATH: /tmp/upinevm-output-action
+      UPINEVM_NOLAUNCH: 1
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          repository: diatribes/upinevm
+          submodules: recursive
 
       - name: musl-gcc compile and strip
         run: |
@@ -30,7 +35,15 @@ jobs:
 
       - name: run bootstrap
         run: |
-          ./bootstrap.sh
+          mkdir -pv $UPINEVM_CACHEPATH
+          mkdir -pv $UPINEVM_OUTPUTPATH
+          if [ ! -f $UPINEVM_OUTPUTPATH/bzImage ]; then
+            cd upinevm && UPINEVM_NOLAUNCH=1 ./bootstrap.sh
+          fi
+          echo UPINEVM_OUTPUTPATH=$UPINEVM_OUTPUTPATH
+          ls -la $UPINEVM_OUTPUTPATH
+          echo UPINEVM_CACHEPATH=$UPINEVM_CACHEPATH
+          ls -la $UPINEVM_CACHEPATH
 
       # - name: run qrun
       #   run: |
