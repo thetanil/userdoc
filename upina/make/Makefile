@@ -1,4 +1,5 @@
 
+.default: all
 
 all: 
-	echo "\o/ all"
+	@echo "make \o/"

@@ -1,8 +1,17 @@
 #!/bin/sh
 set -e
 
+OLDPWD=$(pwd)
+TMPDIR=$(mktemp -d)
+trap "rm -rf $TMPDIR" EXIT
+
+cd $TMPDIR
+unzip /tmp/act_artifacts/1/upina_make/upina_make.zip
+
 mkdir -pv ./input
 mkdir -pv ./output
+cp -v "$OLDPWD/upina/make/run.sh" ./input/run.sh
+cp -v "$OLDPWD/upina/make/Makefile" ./input/Makefile
 
 qemu-system-x86_64 \
     -display none \

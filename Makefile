@@ -12,10 +12,10 @@ ACTCMD := $(ACT) -s GITHUB_TOKEN=$(GITHUB_TOKEN)
 ACT_URL := https://raw.githubusercontent.com/nektos/act/master/install.sh
 ACT_ARTIFACTS := /tmp/act_artifacts/1
 
-.PHONY: localdev all clean list-artifacts ci
+.PHONY: localdev all clean list-artifacts ci run-upina-make
 
 $(ACT):
-	curl -sSfL $(ACT_URL) | sh
+	if [ ! -f $(ACT) ]; then curl -sSfL $(ACT_URL) | sh; fi
 
 $(ACT_ARTIFACTS):
 	mkdir -p $(ACT_ARTIFACTS)
@@ -33,10 +33,13 @@ localdev: $(ACT)
 	# don't echo token, filter out debug messages
 	$(ACT) | grep --color=always -v '::'
 
-all: $(ACT) localdev
+run-upina-make: localdev
+	sh -e -c upina/launch.sh
+
+all: localdev
 
 clean:
 	# if [ -d "$(UPINEVM_CACHEPATH)" ]; then rm -rf "$(UPINEVM_CACHEPATH)"; fi
+	# rm -rf $(ACT)
 	if [ -d "$(UPINEVM_OUTPUTPATH)" ]; then rm -rf "$(UPINEVM_OUTPUTPATH)"; fi
 	rm -rf $(ACT_ARTIFACTS)
-	rm -rf $(ACT)

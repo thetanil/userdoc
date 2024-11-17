@@ -41,6 +41,7 @@ jobs:
           # set variable for build id using matrix.directory but replace / with _
           echo "BUILD_ID=$(echo ${{ matrix.directory }} | tr / _)" >> $GITHUB_ENV
           # echo the var in $GITHUB_ENV
+          ls -la upinevm-builder/input/
 
       - name: run upinevm
         run: |
@@ -66,7 +67,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.BUILD_ID }}
-          path: upinevm-builder/output
+          path: upinevm-builder/output/*
 
   upinevm-builder:
     runs-on: ubuntu-latest
