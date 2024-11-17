@@ -18,6 +18,16 @@ jobs:
         with:
           repository: diatribes/upinevm
 
+      - name: musl-gcc compile and strip
+        run: |
+          # TODO NOT LIKE THIS
+          if ! which musl-gcc; then
+            sudo apt-get update && sudo apt-get install -y musl-tools
+          fi
+          if ! which nasm; then
+            sudo apt-get update && sudo apt-get install -y nasm
+          fi
+
       - name: run bootstrap
         run: |
           ./bootstrap.sh
