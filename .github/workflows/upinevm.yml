@@ -32,6 +32,6 @@ jobs:
         run: |
           ./bootstrap.sh
 
-      - name: run qrun
-        run: |
-          ./qrun.sh
+      # - name: run qrun
+      #   run: |
+      #     ./qrun.sh
