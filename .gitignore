@@ -34,3 +34,8 @@ carlvm-build/alpine-minirootfs-3.20.3-x86_64.cpio
 carlvm-build/bzImage
 carlvm-build/shared/chimera-linux-x86_64-ROOTFS-20241027-bootstrap.tar.gz
 carlvm-build/myimage.img
+carlvm-build/cache/
+carlvm-build/mydisk.qcow2
+docker_mkinitfs/.docker-image
+vm_mkinitfs/alpine.qcow2
+vm_mkinitfs/netboot.iso
