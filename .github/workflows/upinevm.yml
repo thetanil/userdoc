@@ -12,9 +12,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      CACHEPATH: /tmp/upinevm-cache
-      # override in .env
-      UPINEVM_OUTPUTPATH: /tmp/upinevm-output
+      # overriden in .env
+      UPINEVM_CACHEPATH: /tmp/upinevm-cache-action
+      UPINEVM_OUTPUTPATH: /tmp/upinevm-output-action
+      UPINEVM_NOLAUNCH: 1
 
     steps:
       - name: Checkout repository
