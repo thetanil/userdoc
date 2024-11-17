@@ -21,6 +21,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: install deps
+        run: |
+          sudo apt-get update && sudo apt-get install -y qemu-system-x86
+
       - name: get upinevm-builder artifacts
         uses: actions/download-artifact@v4
         with:
