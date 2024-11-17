@@ -15,6 +15,7 @@ jobs:
     strategy:
       matrix:
         directory:
+          - upina/sh
           - upina/make
           - upina/htop
     steps:

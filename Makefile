@@ -36,6 +36,9 @@ localdev: $(ACT)
 run-upina-make: localdev
 	sh -e -c upina/launch.sh
 
+run-upina-sh: localdev
+	sh -e -c upina/sh/launch.sh
+
 all: localdev
 
 clean:
