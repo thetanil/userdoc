@@ -1,0 +1,32 @@
+name: run task in upinevm
+
+on:
+  workflow_call:
+    inputs:
+      script:
+        description: "The script to run"
+        required: true
+
+jobs:
+  build-a-upinevm:
+    name: build upinevm
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: ensure qemu is installed
+        shell: sh
+        run: |
+          # TODO NOT LIKE THIS
+          if ! which qemu-system-x86_64; then
+            sudo apt-get update && sudo apt-get install -y qemu-system-x86
+          fi
+          # if ! which musl-gcc; then
+          #   sudo apt-get update && sudo apt-get install -y musl-tools libelf-dev
+          # fi
+
+      - name: run script
+        shell: sh
+        run: |
+          ${{ inputs.script }}

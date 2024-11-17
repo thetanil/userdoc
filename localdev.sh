@@ -20,6 +20,6 @@ ensure_act
 mkdir -p /tmp/act_artifacts
 
 # suppresses log messages
-act | grep --color=always -v '::'
+act -s GITHUB_TOKEN="$(gh auth token)" | grep --color=always -v '::'
 # act
 
