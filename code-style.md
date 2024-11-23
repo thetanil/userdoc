@@ -1,5 +1,65 @@
 # Code Style Guide
 
+## sh
+
+### POSIX sh
+
+- all shell scripts should be in posix sh
+
+### General Best Practices
+- **Use `#!/bin/sh`**: Ensure all scripts start with the shebang `#!/bin/sh`.
+- **Use `set -e`**: Exit immediately if a command exits with a non-zero status.
+- **Quote Variables**: Always quote variables to prevent word splitting.
+- **Use `$(...)` for Command Substitution**: Prefer `$(...)` over backticks for command substitution.
+- **Check Exit Status**: Always check the exit status of commands using `$?`.
+- **Use Meaningful Variable Names**: Use `snake_case` for variable names.
+- **Use Functions**: Encapsulate code in functions for reusability and readability.
+- **Use `readonly` for Constants**: Declare constants using `readonly` to prevent modification.
+
+### Sourcing Configuration Files
+- **Source Configuration Files**: Use `. ./config.sh` to source shared configuration files.
+- **Allow Environment Variable Overrides**: Allow variables to be overridden by environment variables in the caller's environment.
+
+### Example
+Here is an example of a script following these best practices, including sourcing a configuration file and allowing environment variable overrides:
+
+```sh
+#!/bin/sh
+set -e
+
+# Source config.sh
+. ./config.sh
+
+# Allow environment variable overrides
+BUILDROOT="${BUILDROOT:-$(realpath .)}"
+CACHEPATH="${CACHEPATH:-$(realpath ./build/cache)}"
+KERNELVER="${KERNELVER:-6.12}"
+SRCPATH="${SRCPATH:-$(realpath src)}"
+OUTPUTPATH="${OUTPUTPATH:-$(realpath ./build/output)}"
+INPUTPATH="${INPUTPATH:-$(realpath ./build/input)}"
+INSTALLMEM="${INSTALLMEM:-512M}"
+RUNMEM="${RUNMEM:-512M}"
+KERNELCONFIG="${KERNELCONFIG:-$(realpath ./src/qemu-kernel-config)}"
+
+# Example function
+example_function() {
+    echo "BUILDROOT: $BUILDROOT"
+    echo "CACHEPATH: $CACHEPATH"
+    echo "KERNELVER: $KERNELVER"
+    echo "SRCPATH: $SRCPATH"
+    echo "OUTPUTPATH: $OUTPUTPATH"
+    echo "INPUTPATH: $INPUTPATH"
+    echo "INSTALLMEM: $INSTALLMEM"
+    echo "RUNMEM: $RUNMEM"
+    echo "KERNELCONFIG: $KERNELCONFIG"
+}
+
+# Call the example function
+example_function
+```
+
+This script sources the configuration file config.sh and allows the variables to be overridden by environment variables in the caller's environment.
+
 ## Go
 
 ### File Structure
