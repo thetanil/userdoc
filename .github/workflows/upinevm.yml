@@ -15,9 +15,10 @@ jobs:
     strategy:
       matrix:
         directory:
-          - upina/sh
-          - upina/make
-          - upina/htop
+          - upina/fbtk
+          # - upina/sh
+          # - upina/make
+          # - upina/htop
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

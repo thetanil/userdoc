@@ -42,7 +42,7 @@ run-upina-sh: localdev
 all: localdev
 
 clean:
-	# if [ -d "$(UPINEVM_CACHEPATH)" ]; then rm -rf "$(UPINEVM_CACHEPATH)"; fi
+	if [ -d "$(UPINEVM_CACHEPATH)" ]; then rm -rf "$(UPINEVM_CACHEPATH)"; fi
 	# rm -rf $(ACT)
 	if [ -d "$(UPINEVM_OUTPUTPATH)" ]; then rm -rf "$(UPINEVM_OUTPUTPATH)"; fi
 	rm -rf $(ACT_ARTIFACTS)
