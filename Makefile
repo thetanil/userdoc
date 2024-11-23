@@ -36,10 +36,13 @@ localdev: $(ACT)
 run-upina-make: localdev
 	sh -e -c upina/launch.sh
 
+run-upina-sh: localdev
+	sh -e -c upina/sh/launch.sh
+
 all: localdev
 
 clean:
-	# if [ -d "$(UPINEVM_CACHEPATH)" ]; then rm -rf "$(UPINEVM_CACHEPATH)"; fi
+	if [ -d "$(UPINEVM_CACHEPATH)" ]; then rm -rf "$(UPINEVM_CACHEPATH)"; fi
 	# rm -rf $(ACT)
 	if [ -d "$(UPINEVM_OUTPUTPATH)" ]; then rm -rf "$(UPINEVM_OUTPUTPATH)"; fi
 	rm -rf $(ACT_ARTIFACTS)
