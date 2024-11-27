@@ -101,13 +101,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Checkout upinevm
-        uses: actions/checkout@v4
-        with:
-          repository: "diatribes/upinevm"
-          ref: main
-          fetch-depth: 1
-
       - name: musl-gcc compile and strip
         run: |
           # TODO NOT LIKE THIS (ubuntu/debian specific)
