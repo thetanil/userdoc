@@ -118,6 +118,7 @@ jobs:
           mkdir -pv $UPINEVM_CACHEPATH
           mkdir -pv $UPINEVM_OUTPUTPATH
           if [ ! -f $UPINEVM_OUTPUTPATH/bzImage ]; then
+            ls -la upinevm/src
             cd upinevm && UPINEVM_NOLAUNCH=1 ./bootstrap.sh
           fi
           echo UPINEVM_OUTPUTPATH=$UPINEVM_OUTPUTPATH
