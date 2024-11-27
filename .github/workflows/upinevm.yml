@@ -100,8 +100,20 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: mkdirs
+        run: |
+          mkdir -pv $UPINEVM_CACHEPATH
+          mkdir -pv $UPINEVM_OUTPUTPATH
+          ls -la $UPINEVM_CACHEPATH
+
+      - name: Checkout upinevm
+        uses: actions/checkout@v4
         with:
-          submodules: recursive
+          repository: "diatribes/upinevm"
+          ref: main
+          path: ${{ env.UPINEVM_CACHEPATH }}
+          fetch-depth: 1
 
       - name: musl-gcc compile and strip
         run: |
@@ -115,8 +127,6 @@ jobs:
 
       - name: run bootstrap
         run: |
-          mkdir -pv $UPINEVM_CACHEPATH
-          mkdir -pv $UPINEVM_OUTPUTPATH
           if [ ! -f $UPINEVM_OUTPUTPATH/bzImage ]; then
             ls -la upinevm/src
             cd upinevm && UPINEVM_NOLAUNCH=1 ./bootstrap.sh
