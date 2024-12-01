@@ -15,5 +15,5 @@ go app with embed fs unpacked
 - hugo
 - act
 - pandoc
+- prebuilt carl-exit
 - bins for rootfs
--
