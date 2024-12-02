@@ -32,7 +32,7 @@ and git?
 how do i edit and save files - in host
 act inside
 
-### next
+### done
 
 remove upina
 download zip
@@ -41,3 +41,11 @@ download zip
 curl -L -o repo.zip https://github.com/diatribes/upinevm/archive/refs/heads/main.zip
 
 ```
+
+### next
+
+- add hugo and act packages
+- add packages conf in upinevm action
+- add run script to start hugo
+- expose port
+- make it a release

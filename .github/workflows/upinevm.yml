@@ -44,9 +44,12 @@ jobs:
           mv images/gccvm/rootfs.cpio $UPINEVM_OUTPUTPATH/
           mv images/gccvm/run $UPINEVM_OUTPUTPATH/input
           cp "$GITHUB_WORKSPACE/launch.sh" $UPINEVM_OUTPUTPATH/
+          sudo rm -rf $UPINEVM_CACHEPATH
+          sudo rm -rf upinevm
           # launched the vm but that doesn't work in container
           # mkdir -pv $UPINEVM_OUTPUTPATH/output
           # cd $UPINEVM_OUTPUTPATH && ./launch.sh
+          ls -la $UPINEVM_OUTPUTPATH
 
       - name: upload artifacts
         uses: actions/upload-artifact@v4
