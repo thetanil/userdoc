@@ -40,6 +40,7 @@ jobs:
           mkdir -pv $UPINEVM_OUTPUTPATH
           cd upinevm
           cp -r ${{ github.workspace }}/vmspec/hugo/packages.conf ./src/
+          cp -r ${{ github.workspace }}/vmspec/hugo/kconfig ./src/kernel-configs/qemu-small-virtiofs-no-tcp
           ./bootstrap.sh
           mv images/gccvm/bzImage $UPINEVM_OUTPUTPATH/
           mv images/gccvm/rootfs.cpio $UPINEVM_OUTPUTPATH/
