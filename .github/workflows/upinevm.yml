@@ -29,7 +29,7 @@ jobs:
           mv upinevm-fix-stylepoints upinevm
           rm upinevm.zip
 
-      - name: build upinevm
+      - name: bootstrap upinevm
         env:
           UPINEVM_CACHEPATH: ${{ github.workspace }}/upinecache
           UPINEVM_OUTPUTPATH: ${{ github.workspace }}/upineoutput
@@ -39,11 +39,12 @@ jobs:
           mkdir -pv $UPINEVM_CACHEPATH
           mkdir -pv $UPINEVM_OUTPUTPATH
           cd upinevm
+          cp -r ${{ github.workspace }}/vmspec/hugo/packages.conf ./src/
           ./bootstrap.sh
           mv images/gccvm/bzImage $UPINEVM_OUTPUTPATH/
           mv images/gccvm/rootfs.cpio $UPINEVM_OUTPUTPATH/
           mv images/gccvm/run $UPINEVM_OUTPUTPATH/input
-          cp "$GITHUB_WORKSPACE/launch.sh" $UPINEVM_OUTPUTPATH/
+          cp "$GITHUB_WORKSPACE/vmspec/hugo/launch.sh" $UPINEVM_OUTPUTPATH/
           sudo rm -rf $UPINEVM_CACHEPATH
           sudo rm -rf upinevm
           # launched the vm but that doesn't work in container

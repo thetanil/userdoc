@@ -2,8 +2,8 @@ SHELL := /bin/sh
 .SHELLFLAGS := -ec
 
 ifneq (,$(wildcard ./.env))
-    include .env
-    export
+	include .env
+	export
 endif
 
 GITHUB_TOKEN := $(shell gh auth token)
@@ -14,7 +14,7 @@ ACT_ARTIFACTS := /tmp/act_artifacts/1
 
 all: localdev
 
-.PHONY: localdev all clean list-artifacts ci run-upina-make
+.PHONY: localdev all clean list-artifacts ci run-upina-make unpack
 
 $(ACT):
 	if [ ! -f $(ACT) ]; then curl -sSfL $(ACT_URL) | sh; fi
@@ -42,6 +42,10 @@ run-upina-make: localdev
 run-upina-sh: localdev
 	sh -e -c upina/sh/launch.sh
 
+.PHONY: unpack
+unpack: localdev
+	@echo "Unpacking upina"
+	./scripts/unpack.sh
 
 clean:
 	if [ -d "$(UPINEVM_CACHEPATH)" ]; then sudo rm -rf "$(UPINEVM_CACHEPATH)"; fi
